@@ -1121,3 +1121,33 @@ Caused by: org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bea
 25-02-25.20:36:37.606 [main            ] INFO  DecisionTreeEngine     - 决策树引擎【决策树规则；增加dall-e-3画图模型】treeId:100000001 node:rule_stock code:0001
 25-02-25.20:36:37.608 [main            ] INFO  DecisionTreeEngine     - 决策树引擎【决策树规则；增加dall-e-3画图模型】treeId:100000001 node:rule_luck_award code:0001
 25-02-25.20:36:37.771 [main            ] INFO  LogicTreeTest          - 测试结果：{"awardId":101,"awardRuleValue":"1,100"}
+25-02-25.21:13:52.229 [main            ] INFO  StrategyRepositoryTest - Starting StrategyRepositoryTest using Java 17.0.14 on DESKTOP-7CGFQ5E with PID 19868 (started by romedom in E:\java\big-market\big-market-app)
+25-02-25.21:13:52.231 [main            ] INFO  StrategyRepositoryTest - The following 1 profile is active: "dev"
+25-02-25.21:13:53.628 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-02-25.21:13:53.651 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-02-25.21:13:53.756 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 39 ms. Found 0 Redis repository interfaces.
+25-02-25.21:13:56.037 [main            ] INFO  Version                - Redisson 3.23.4
+25-02-25.21:13:56.574 [redisson-netty-2-4] INFO  MasterPubSubConnectionPool - 1 connections initialized for 192.168.157.129/192.168.157.129:6379
+25-02-25.21:13:56.594 [redisson-netty-2-13] INFO  MasterConnectionPool   - 5 connections initialized for 192.168.157.129/192.168.157.129:6379
+25-02-25.21:13:58.987 [main            ] INFO  EndpointLinksResolver  - Exposing 1 endpoint(s) beneath base path '/actuator'
+25-02-25.21:13:59.065 [main            ] INFO  StrategyRepositoryTest - Started StrategyRepositoryTest in 7.504 seconds (JVM running for 8.816)
+25-02-25.21:13:59.777 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+25-02-25.21:14:00.172 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+25-02-25.21:14:00.535 [main            ] INFO  StrategyRepositoryTest - 测试结果：{"treeDesc":"规则树","treeId":"tree_lock","treeName":"规则树","treeNodeMap":{},"treeRootRuleNode":"rule_lock"}
+25-02-25.21:14:00.573 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown initiated...
+25-02-25.21:14:00.586 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown completed.
+25-02-25.21:14:57.301 [main            ] INFO  StrategyRepositoryTest - Starting StrategyRepositoryTest using Java 17.0.14 on DESKTOP-7CGFQ5E with PID 14768 (started by romedom in E:\java\big-market\big-market-app)
+25-02-25.21:14:57.303 [main            ] INFO  StrategyRepositoryTest - The following 1 profile is active: "dev"
+25-02-25.21:14:58.395 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-02-25.21:14:58.400 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-02-25.21:14:58.451 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 30 ms. Found 0 Redis repository interfaces.
+25-02-25.21:15:00.045 [main            ] INFO  Version                - Redisson 3.23.4
+25-02-25.21:15:00.618 [redisson-netty-2-4] INFO  MasterPubSubConnectionPool - 1 connections initialized for 192.168.157.129/192.168.157.129:6379
+25-02-25.21:15:00.637 [redisson-netty-2-13] INFO  MasterConnectionPool   - 5 connections initialized for 192.168.157.129/192.168.157.129:6379
+25-02-25.21:15:03.090 [main            ] INFO  EndpointLinksResolver  - Exposing 1 endpoint(s) beneath base path '/actuator'
+25-02-25.21:15:03.167 [main            ] INFO  StrategyRepositoryTest - Started StrategyRepositoryTest in 6.561 seconds (JVM running for 7.874)
+25-02-25.21:15:03.973 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+25-02-25.21:15:04.342 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+25-02-25.21:15:04.650 [main            ] INFO  StrategyRepositoryTest - 测试结果：{"treeDesc":"规则树","treeId":"tree_lock","treeName":"规则树","treeNodeMap":{"rule_lock":{"ruleDesc":"限定用户已完成N次抽奖后解锁","ruleKey":"rule_lock","ruleValue":"1","treeId":"tree_lock","treeNodeLineVOList":[{"ruleLimitType":"EQUAL","ruleLimitValue":"ALLOW","ruleNodeFrom":"rule_lock","ruleNodeTo":"rule_stock","treeId":"tree_lock"},{"ruleLimitType":"EQUAL","ruleLimitValue":"TAKE_OVER","ruleNodeFrom":"rule_lock","ruleNodeTo":"rule_luck_award","treeId":"tree_lock"}]},"rule_stock":{"ruleDesc":"库存扣减规则","ruleKey":"rule_stock","treeId":"tree_lock","treeNodeLineVOList":[{"ruleLimitType":"EQUAL","ruleLimitValue":"TAKE_OVER","ruleNodeFrom":"rule_stock","ruleNodeTo":"rule_luck_award","treeId":"tree_lock"}]},"rule_luck_award":{"ruleDesc":"兜底奖品随机积分","ruleKey":"rule_luck_award","ruleValue":"1,100","treeId":"tree_lock"}},"treeRootRuleNode":"rule_lock"}
+25-02-25.21:15:04.687 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown initiated...
+25-02-25.21:15:04.697 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown completed.
