@@ -86,9 +86,10 @@ public class StrategyRepository implements IStrategyRepository {
     public StrategyEntity queryStrateguEntitiesByStrategyId(Long strategyId) {
         String cacheKey = Constants.RedisKey.STRATEGY_KEY+strategyId;
         StrategyEntity strategyEntity = redisService.getValue(cacheKey);
-        if(null!=strategyEntity){
-            return strategyEntity;
-        }
+// todo:redis 缓存
+//        if(null!=strategyEntity){
+//            return strategyEntity;
+//        }
         Strategy strategy =  strategyDao.queryStrategyByStrategyId(strategyId);
         strategyEntity = StrategyEntity.builder()
                 .strategyId(strategy.getStrategyId())
@@ -99,6 +100,15 @@ public class StrategyRepository implements IStrategyRepository {
         return strategyEntity;
     }
 
+
+    @Override
+    public String queryStrategyRuleValue(Long strategyId,  String ruleModel) {
+        StrategyRule strategyRuleReq = new StrategyRule();
+        strategyRuleReq.setStrategyId(strategyId);
+        strategyRuleReq.setAwardId(null);
+        strategyRuleReq.setRuleModel(ruleModel);
+        return strategyRuleDao.queryStrategyRuleValue(strategyRuleReq);
+    }
 
     @Override
     public String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel) {
@@ -124,9 +134,11 @@ public class StrategyRepository implements IStrategyRepository {
         strategyRuleReq.setStrategyId(strategyId);
         strategyRuleReq.setRuleModel(ruleModel);
         StrategyRule strategyRule = strategyRuleDao.queryStrategyRule(strategyRuleReq);
-
+        if(null==strategyRule){
+            return null;
+        }
         return StrategyRuleEntity.builder()
-                .strategyId(strategyRule.getStrategyId())
+                .strategyId(strategyId)
                 .ruleDesc(strategyRule.getRuleDesc())
                 .ruleType(strategyRule.getRuleType())
                 .ruleValue(strategyRule.getRuleValue())
