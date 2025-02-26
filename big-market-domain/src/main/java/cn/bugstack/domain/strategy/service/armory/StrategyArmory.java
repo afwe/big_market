@@ -4,6 +4,7 @@ import cn.bugstack.domain.strategy.model.entity.StrategyAwardEntity;
 import cn.bugstack.domain.strategy.model.entity.StrategyEntity;
 import cn.bugstack.domain.strategy.model.entity.StrategyRuleEntity;
 import cn.bugstack.domain.strategy.repository.IStrategyRepository;
+import cn.bugstack.types.common.Constants;
 import cn.bugstack.types.enums.ResponseCode;
 import cn.bugstack.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,13 @@ public class StrategyArmory implements IStrategyArmory, IStrategyDispatch{
     @Override
     public boolean assembleLotteryStrategy(Long strategyId) {
         List<StrategyAwardEntity> strategyAwardEntities = strategyRepository.queryStrategyAwardList(strategyId);
+        for(StrategyAwardEntity strategyAwardEntity : strategyAwardEntities){
+            Integer awardId = strategyAwardEntity.getAwardId();
+            Integer awardCount = strategyAwardEntity.getAwardCount();
+            cacheStrategyAwardCount(strategyId, awardId, awardCount);
+        }
+
+        //全量抽奖
         assembleLotteryStrategy(String.valueOf(strategyId), strategyAwardEntities);
         StrategyEntity strategyEntity = strategyRepository.queryStrateguEntitiesByStrategyId(strategyId);
         String ruleWeight = strategyEntity.getRuleWeight();
@@ -49,6 +57,12 @@ public class StrategyArmory implements IStrategyArmory, IStrategyDispatch{
         return true;
 
     }
+
+    private void cacheStrategyAwardCount(Long strategyId, Integer awardId, Integer awardCount) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId+Constants.UNDERLINE+awardId;
+        strategyRepository.cacheStrategyAwardCount(cacheKey,awardCount);
+    }
+
     private void assembleLotteryStrategy(String strategyId,List<StrategyAwardEntity> strategyAwardEntities){
         BigDecimal minAwardRate = strategyAwardEntities.stream()
                 .map(StrategyAwardEntity::getAwardRate)
@@ -84,5 +98,11 @@ public class StrategyArmory implements IStrategyArmory, IStrategyDispatch{
         String key = String.valueOf(strategyId).concat("_").concat(ruleWeightValue);
         int randomRange = strategyRepository.getRandomRange(key);
         return strategyRepository.getStrategyAwardAssemble(key,new SecureRandom().nextInt(randomRange));
+    }
+
+    @Override
+    public Boolean subtractionAwardStock(Long strategyId, Integer awardId) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId+Constants.UNDERLINE+awardId;
+        return strategyRepository.subtractionAwardStock(cacheKey);
     }
 }

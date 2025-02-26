@@ -6,6 +6,7 @@ import cn.bugstack.domain.strategy.model.entity.RuleMatterEntity;
 import cn.bugstack.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import cn.bugstack.domain.strategy.model.valobj.RuleTreeVO;
 import cn.bugstack.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
+import cn.bugstack.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 import cn.bugstack.domain.strategy.repository.IStrategyRepository;
 import cn.bugstack.domain.strategy.service.AbstractRaffleStrategy;
 import cn.bugstack.domain.strategy.service.armory.IStrategyDispatch;
@@ -31,9 +32,19 @@ import java.util.stream.Collectors;
 @Service
 public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
 
-
     public DefaultRaffleStrategy(IStrategyRepository strategyRepository, IStrategyDispatch strategyDispatch, DefaultChainFactory defaultChainFactory, DefaultTreeFactory defaultTreeFactory) {
         super(strategyRepository, strategyDispatch, defaultChainFactory, defaultTreeFactory);
+    }
+
+    @Override
+    public StrategyAwardStockKeyVO takeQueueValue() throws InterruptedException {
+
+        return strategyRepository.takeQueueValue();
+    }
+
+    @Override
+    public void updateStrategyAwardStock(Long strategyId, Integer awardId) {
+        strategyRepository.updateStrategyAwardStock(strategyId,awardId);
     }
 
     @Override
