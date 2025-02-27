@@ -769,7 +769,7 @@ Action:
 
 Consider defining a bean of type 'cn.bugstack.domain.strategy.repository.IStrategyRepository' in your configuration.
 
-25-02-24.16:01:12.238 [main            ] ERROR TestContextManager     - Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener@451001e5] to prepare test instance [cn.bugstack.test.domain.StrategyArmoryTest@729c8063]
+25-02-24.16:01:12.238 [main            ] ERROR TestContextManager     - Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener@451001e5] to prepare test instance [cn.bugstack.test.domain.strategy.StrategyArmoryTest@729c8063]
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:98)
 	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:124)
@@ -971,7 +971,7 @@ Caused by: java.lang.IllegalArgumentException: Mapped Statements collection alre
 	at org.apache.ibatis.builder.xml.XMLMapperBuilder.buildStatementFromContext(XMLMapperBuilder.java:131)
 	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:121)
 	... 102 common frames omitted
-25-02-24.16:02:09.239 [main            ] ERROR TestContextManager     - Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener@451001e5] to prepare test instance [cn.bugstack.test.domain.StrategyArmoryTest@5b02a984]
+25-02-24.16:02:09.239 [main            ] ERROR TestContextManager     - Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener@451001e5] to prepare test instance [cn.bugstack.test.domain.strategy.StrategyArmoryTest@5b02a984]
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:98)
 	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:124)
