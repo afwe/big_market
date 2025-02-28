@@ -7,7 +7,7 @@ APPLICATION FAILED TO START
 
 Description:
 
-Parameter 0 of constructor in cn.bugstack.domain.activity.service.RaffleActivityService required a bean of type 'cn.bugstack.domain.activity.event.ActivitySkuStockZeroMessageEvent' that could not be found.
+Parameter 0 of constructor in cn.bugstack.domain.activity.service.quota.RaffleActivityAccountQuotaService required a bean of type 'cn.bugstack.domain.activity.event.ActivitySkuStockZeroMessageEvent' that could not be found.
 
 
 Action:
@@ -130,3 +130,4 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 25-02-28.13:40:06.750 [main            ] WARN  RaffleOrderTest        - 活动库存不足
 25-02-28.13:40:06.756 [main            ] WARN  RaffleOrderTest        - 活动库存不足
 25-02-28.13:40:06.762 [main            ] WARN  RaffleOrderTest        - 活动库存不足
+25-02-28.20:04:39.366 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=1m11s884ms396µs900ns).

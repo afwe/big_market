@@ -8,8 +8,8 @@ import cn.bugstack.domain.activity.model.entity.SkuRechargeEntity;
  * @author luke
  * @date 2025年02月27日 16:55
  */
-public interface IRaffleOrder {
+public interface IRaffleActivityAccountQuotaService {
     ActivityOrderEntity createRaffleActivityOrder(ActivityShopCartEntity activityShopCartEntity);
 
-    String createSkuRechargeOrder(SkuRechargeEntity skuRechargeEntity);
+    String createOrder(SkuRechargeEntity skuRechargeEntity);
 }
