@@ -19,10 +19,7 @@ import org.redisson.api.RMap;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static cn.bugstack.types.enums.ResponseCode.UN_ASSEMBLED_STRATEGY_ARMORY;
@@ -112,13 +109,13 @@ public class StrategyRepository implements IStrategyRepository {
     @Override
     public StrategyEntity queryStrateguEntitiesByStrategyId(Long strategyId) {
         String cacheKey = Constants.RedisKey.STRATEGY_KEY+strategyId;
-        StrategyEntity strategyEntity = redisService.getValue(cacheKey);
+//        StrategyEntity strategyEntity = redisService.getValue(cacheKey);
 // todo:redis 缓存
 //        if(null!=strategyEntity){
 //            return strategyEntity;
 //        }
         Strategy strategy =  strategyDao.queryStrategyByStrategyId(strategyId);
-        strategyEntity = StrategyEntity.builder()
+        StrategyEntity strategyEntity = StrategyEntity.builder()
                 .strategyId(strategy.getStrategyId())
                 .strategyDesc(strategy.getStrategyDesc())
                 .ruleModels(strategy.getRuleModels())
@@ -211,14 +208,20 @@ public class StrategyRepository implements IStrategyRepository {
     }
 
     @Override
-    public Boolean subtractionAwardStock(String cacheKey) {
+    public Boolean subtractionAwardStock(String cacheKey, Date endDateTime) {
         long surplus = redisService.decr(cacheKey);
         if(surplus<0){
             redisService.setValue(cacheKey, 0);
             return false;
         }
         String lockKey = cacheKey + Constants.UNDERLINE +surplus;
-        Boolean lock = redisService.setNx(lockKey);
+        Boolean lock=false;
+        if(null!=endDateTime){
+            long expireMillis = endDateTime.getTime() - System.currentTimeMillis()+TimeUnit.DAYS.toMillis(1);
+            lock = redisService.setNx(lockKey,expireMillis,TimeUnit.MILLISECONDS);
+        } else{
+            lock = redisService.setNx(lockKey);
+        }
         if(!lock){
             log.info("扣减库存锁失败");
         }

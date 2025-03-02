@@ -16,6 +16,8 @@ import cn.bugstack.middleware.db.router.strategy.IDBRouterStrategy;
 import cn.bugstack.types.common.Constants;
 import cn.bugstack.types.enums.ResponseCode;
 import cn.bugstack.types.exception.AppException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
@@ -83,11 +85,11 @@ public class ActivityRepository implements IActivityRepository {
     public ActivityEntity queryRaffleActivityByActivityId(Long activityId) {
         // 优先从缓存获取
         String cacheKey = Constants.RedisKey.ACTIVITY_KEY + activityId;
-        ActivityEntity activityEntity = redisService.getValue(cacheKey);
-        if (null != activityEntity) return activityEntity;
+        JSONObject activityEntityFromRedis = redisService.getValue(cacheKey);
+        if (null != activityEntityFromRedis) return JSON.parseObject(activityEntityFromRedis.toString(),ActivityEntity.class);
         // 从库中获取数据
         RaffleActivity raffleActivity = raffleActivityDao.queryRaffleActivityByActivityId(activityId);
-        activityEntity = ActivityEntity.builder()
+        ActivityEntity activityEntity = ActivityEntity.builder()
                 .activityId(raffleActivity.getActivityId())
                 .activityName(raffleActivity.getActivityName())
                 .activityDesc(raffleActivity.getActivityDesc())
