@@ -73,7 +73,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("1")
+                .title("swagger")
                 .description("测试文档")
                 .termsOfServiceUrl("https://www.baidu.com")
                 .version("1.x")

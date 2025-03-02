@@ -8,5 +8,7 @@ import cn.bugstack.domain.activity.model.entity.UserRaffleOrderEntity;
  * @date 2025年02月28日 16:27
  */
 public interface IRaffleActivityPartakeService {
+
+    UserRaffleOrderEntity createOrder(String userId, Long activityId);
     UserRaffleOrderEntity createOrder(PartakeRaffleActivityEntity partakeRaffleActivityEntity);
 }

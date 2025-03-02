@@ -33,6 +33,8 @@ import static cn.bugstack.types.enums.ResponseCode.UN_ASSEMBLED_STRATEGY_ARMORY;
 @Service
 public class StrategyRepository implements IStrategyRepository {
     @Resource
+    private IRaffleActivityDao raffleActivityDao;
+    @Resource
     private IStrategyAwardDao strategyAwardDao;
     @Resource
     private IStrategyDao strategyDao;
@@ -40,6 +42,8 @@ public class StrategyRepository implements IStrategyRepository {
     private IStrategyRuleDao strategyRuleDao;
     @Resource
     private IRedisService redisService;
+    @Resource
+    private IRaffleActivityAccountDayDao raffleActivityAccountDayDao;
 
     @Resource
     private IRuleTreeDao ruleTreeDao;
@@ -265,6 +269,26 @@ public class StrategyRepository implements IStrategyRepository {
         redisService.setValue(cacheKey, strategyAwardEntity);
         // 返回数据
         return strategyAwardEntity;
+    }
+
+    @Override
+    public Long queryStrategyIdByActivityId(Long activityId) {
+
+        return raffleActivityDao.queryStrategyIdByActivityId(activityId);
+    }
+
+    @Override
+    public Integer queryTodayUserRaffleCount(String userId, Long strategyId) {
+        Long activityId = raffleActivityDao.queryActivityIdByStrategyId(strategyId);
+        RaffleActivityAccountDay raffleActivityAccountDayReq = new RaffleActivityAccountDay();
+        raffleActivityAccountDayReq.setActivityId(activityId);
+        raffleActivityAccountDayReq.setUserId(userId);
+        raffleActivityAccountDayReq.setDay(raffleActivityAccountDayReq.currentDay());
+        RaffleActivityAccountDay raffleActivityAccountDay = raffleActivityAccountDayDao.queryActivityAccountDayByUserId(raffleActivityAccountDayReq);
+        if(null == raffleActivityAccountDay){
+            return 0;
+        }
+        return raffleActivityAccountDay.getDayCount() - raffleActivityAccountDay.getDayCountSurplus();
     }
 
     @Override
