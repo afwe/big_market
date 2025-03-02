@@ -11,6 +11,7 @@ import cn.bugstack.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 import cn.bugstack.domain.strategy.repository.IStrategyRepository;
 import cn.bugstack.domain.strategy.service.AbstractRaffleStrategy;
 import cn.bugstack.domain.strategy.service.IRaffleAward;
+import cn.bugstack.domain.strategy.service.IRaffleRule;
 import cn.bugstack.domain.strategy.service.IRaffleStock;
 import cn.bugstack.domain.strategy.service.armory.IStrategyDispatch;
 import cn.bugstack.domain.strategy.service.rule.chain.ILogicChain;
@@ -33,14 +34,27 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class DefaultRaffleStrategy extends AbstractRaffleStrategy implements IRaffleAward, IRaffleStock {
+public class DefaultRaffleStrategy extends AbstractRaffleStrategy implements IRaffleAward, IRaffleStock, IRaffleRule {
+
     public DefaultRaffleStrategy(IStrategyRepository strategyRepository, IStrategyDispatch strategyDispatch, DefaultChainFactory defaultChainFactory, DefaultTreeFactory defaultTreeFactory) {
         super(strategyRepository, strategyDispatch, defaultChainFactory, defaultTreeFactory);
     }
 
     @Override
+    public Map<String, Integer> queryAwardRuleLockCount(String[] treeIds) {
+        return strategyRepository.queryAwardRuleLockCount(treeIds);
+    }
+
+    @Override
     public List<StrategyAwardEntity> queryRaffleStrategyAwardList(Long strategyId) {
         return strategyRepository.queryStrategyAwardList(strategyId);
+    }
+
+    @Override
+    public List<StrategyAwardEntity> queryRaffleStrategyAwardListByActivityId(Long activityId) {
+        Long strategyId = strategyRepository.queryStrategyIdByActivityId(activityId);
+
+        return queryRaffleStrategyAwardList(strategyId);
     }
 
     @Override

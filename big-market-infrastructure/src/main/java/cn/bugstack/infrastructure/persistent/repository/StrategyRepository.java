@@ -10,6 +10,8 @@ import cn.bugstack.infrastructure.persistent.po.*;
 import cn.bugstack.infrastructure.persistent.redis.IRedisService;
 import cn.bugstack.types.common.Constants;
 import cn.bugstack.types.exception.AppException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
@@ -56,11 +58,13 @@ public class StrategyRepository implements IStrategyRepository {
     public List<StrategyAwardEntity> queryStrategyAwardList(Long strategyId) {
         // 优先从缓存获取
         String cacheKey = Constants.RedisKey.STRATEGY_AWARD_LIST_KEY + strategyId;
-        List<StrategyAwardEntity> strategyAwardEntities = redisService.getValue(cacheKey);
-        if (null != strategyAwardEntities && !strategyAwardEntities.isEmpty()) return strategyAwardEntities;
+        JSONArray strategyAwardEntitiesFromRedis = redisService.getValue(cacheKey);
+        if (null != strategyAwardEntitiesFromRedis && !strategyAwardEntitiesFromRedis.isEmpty()){
+            return JSON.parseArray(strategyAwardEntitiesFromRedis.toString(), StrategyAwardEntity.class);
+        }
         // 从库中获取数据
         List<StrategyAward> strategyAwards = strategyAwardDao.queryStrategyAwardListByStrategyId(strategyId);
-        strategyAwardEntities = new ArrayList<>(strategyAwards.size());
+        List<StrategyAwardEntity> strategyAwardEntities = new ArrayList<>(strategyAwards.size());
         for (StrategyAward strategyAward : strategyAwards) {
             StrategyAwardEntity strategyAwardEntity = StrategyAwardEntity.builder()
                     .strategyId(strategyAward.getStrategyId())
@@ -71,6 +75,7 @@ public class StrategyRepository implements IStrategyRepository {
                     .awardCountSurplus(strategyAward.getAwardCountSurplus())
                     .awardRate(strategyAward.getAwardRate())
                     .sort(strategyAward.getSort())
+                    .ruleModels(strategyAward.getRuleModels())
                     .build();
             strategyAwardEntities.add(strategyAwardEntity);
         }
@@ -289,6 +294,21 @@ public class StrategyRepository implements IStrategyRepository {
             return 0;
         }
         return raffleActivityAccountDay.getDayCount() - raffleActivityAccountDay.getDayCountSurplus();
+    }
+
+    @Override
+    public Map<String, Integer> queryAwardRuleLockCount(String[] treeIds) {
+        if(null ==treeIds || treeIds.length == 0){
+            return new HashMap<>();
+        }
+        List<RuleTreeNode> ruleTreeNodes = ruleTreeNodeDao.queryRuleLocks(treeIds);
+        Map<String, Integer> result = new HashMap<>();
+        for(RuleTreeNode ruleTreeNode : ruleTreeNodes){
+            String treeId = ruleTreeNode.getTreeId();
+            Integer ruleValue = Integer.valueOf(ruleTreeNode.getRuleValue());
+            result.put(treeId,ruleValue);
+        }
+        return result;
     }
 
     @Override
