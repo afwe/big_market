@@ -918,3 +918,7 @@ Caused by: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'x
 	... 45 common frames omitted
 25-03-05.14:24:47.211 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=1m3s654ms228µs331ns).
 25-03-05.14:24:47.215 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=1m4s34ms395µs572ns).
+25-03-05.16:26:46.831 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=52s843ms600µs723ns).
+25-03-05.16:26:46.831 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=52s843ms600µs793ns).
+25-03-05.16:28:59.978 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=2m13s146ms403µs942ns).
+25-03-05.16:28:59.978 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=2m13s146ms405µs409ns).
