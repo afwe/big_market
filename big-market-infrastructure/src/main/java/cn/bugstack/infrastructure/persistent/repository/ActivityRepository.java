@@ -157,11 +157,13 @@ public class ActivityRepository implements IActivityRepository {
     public ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId) {
         // 优先从缓存获取
         String cacheKey = Constants.RedisKey.ACTIVITY_COUNT_KEY + activityCountId;
-        ActivityCountEntity activityCountEntity = redisService.getValue(cacheKey);
-        if (null != activityCountEntity) return activityCountEntity;
+        JSONObject activityCountEntityFromRedis = redisService.getValue(cacheKey);
+        if (null != activityCountEntityFromRedis){
+            return JSON.parseObject(activityCountEntityFromRedis.toString(), ActivityCountEntity.class);
+        }
         // 从库中获取数据
         RaffleActivityCount raffleActivityCount = raffleActivityCountDao.queryRaffleActivityCountByActivityCountId(activityCountId);
-        activityCountEntity = ActivityCountEntity.builder()
+        ActivityCountEntity activityCountEntity = ActivityCountEntity.builder()
                 .activityCountId(raffleActivityCount.getActivityCountId())
                 .totalCount(raffleActivityCount.getTotalCount())
                 .dayCount(raffleActivityCount.getDayCount())

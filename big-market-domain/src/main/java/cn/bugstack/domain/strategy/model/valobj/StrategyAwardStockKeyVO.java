@@ -1,15 +1,12 @@
 package cn.bugstack.domain.strategy.model.valobj;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author luke
  * @date 2025年02月26日 12:13
  */
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -12,6 +12,7 @@ import cn.bugstack.types.common.Constants;
 import cn.bugstack.types.exception.AppException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
@@ -156,7 +157,7 @@ public class StrategyRepository implements IStrategyRepository {
     public RuleTreeVO queryRuleTreeVOByTreeId(String treeId) {
 
         String cacheKey = Constants.RedisKey.RULE_TREE_VO_KEY + treeId;
-        RuleTreeVO ruleTreeVOCache = redisService.getValue(cacheKey);
+//        RuleTreeVO ruleTreeVOCache = redisService.getValue(cacheKey);
         //todo redis cache
         //if (null != ruleTreeVOCache) return ruleTreeVOCache;
 
@@ -240,7 +241,11 @@ public class StrategyRepository implements IStrategyRepository {
     public StrategyAwardStockKeyVO takeQueueValue() {
         String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_QUERY_KEY;
         RBlockingQueue<StrategyAwardStockKeyVO> blockingQueue = redisService.getBlockingQueue(cacheKey);
-        return blockingQueue.poll();
+        Object obj = blockingQueue.poll();
+        if(null==obj){
+            return null;
+        }
+        return JSONObject.parseObject( obj.toString(), StrategyAwardStockKeyVO.class) ;
     }
 
     @Override

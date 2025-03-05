@@ -1,5 +1,5 @@
 server:
-  port: 8091
+  port: 8080
 
 
 app:
@@ -22,6 +22,7 @@ spring:
     topic:
       activity_sku_stock_zero: activity_sku_stock_zero
       send_award: send_award
+      send_rebate: send_rebate
 
 # 线程池配置
 thread:
