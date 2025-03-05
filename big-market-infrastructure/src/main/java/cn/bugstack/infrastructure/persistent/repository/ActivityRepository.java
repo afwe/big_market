@@ -8,6 +8,7 @@ import cn.bugstack.domain.activity.model.valobj.ActivityStateVO;
 import cn.bugstack.domain.activity.model.valobj.ActivitySkuStockKeyVO;
 import cn.bugstack.domain.activity.model.valobj.UserRaffleOrderStateVO;
 import cn.bugstack.domain.activity.repository.IActivityRepository;
+import cn.bugstack.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 import cn.bugstack.infrastructure.event.EventPublisher;
 import cn.bugstack.infrastructure.persistent.dao.*;
 import cn.bugstack.infrastructure.persistent.po.*;
@@ -134,6 +135,24 @@ public class ActivityRepository implements IActivityRepository {
             raffleActivityAccount.setMonthCount(createOrderAggregate.getMonthCount());
             raffleActivityAccount.setMonthCountSurplus(createOrderAggregate.getMonthCount());
             dbRouter.doRouter(createOrderAggregate.getUserId());
+
+            // 账户对象 - 月
+            RaffleActivityAccountMonth raffleActivityAccountMonth = new RaffleActivityAccountMonth();
+            raffleActivityAccountMonth.setUserId(createOrderAggregate.getUserId());
+            raffleActivityAccountMonth.setActivityId(createOrderAggregate.getActivityId());
+            raffleActivityAccountMonth.setMonth(raffleActivityAccountMonth.currentMonth());
+            raffleActivityAccountMonth.setMonthCount(createOrderAggregate.getMonthCount());
+            raffleActivityAccountMonth.setMonthCountSurplus(createOrderAggregate.getMonthCount());
+
+            // 账户对象 - 日
+            RaffleActivityAccountDay raffleActivityAccountDay = new RaffleActivityAccountDay();
+            raffleActivityAccountDay.setUserId(createOrderAggregate.getUserId());
+            raffleActivityAccountDay.setActivityId(createOrderAggregate.getActivityId());
+            raffleActivityAccountDay.setDay(raffleActivityAccountDay.currentDay());
+            raffleActivityAccountDay.setDayCount(createOrderAggregate.getDayCount());
+            raffleActivityAccountDay.setDayCountSurplus(createOrderAggregate.getDayCount());
+
+
             transactionTemplate.execute(status -> {
                 try{
                     raffleActivityOrderDao.insert(raffleActivityOrder);
@@ -141,6 +160,9 @@ public class ActivityRepository implements IActivityRepository {
                     if(0 == count){
                         raffleActivityAccountDao.insert(raffleActivityAccount);
                     }
+                    raffleActivityAccountMonthDao.addAccountQuota(raffleActivityAccountMonth);
+                    // 5. 更新账户 - 日
+                    raffleActivityAccountDayDao.addAccountQuota(raffleActivityAccountDay);
                     return 1;
                 }catch (DuplicateKeyException e){
                     status.setRollbackOnly();
@@ -210,7 +232,11 @@ public class ActivityRepository implements IActivityRepository {
         String cacheKey = Constants.RedisKey.ACTIVITY_SKU_COUNT_QUERY_KEY;
         RBlockingQueue<ActivitySkuStockKeyVO> destinationQueue = redisService.getBlockingQueue(cacheKey);
 
-        return destinationQueue.poll();
+        Object obj =  destinationQueue.poll();
+        if(null==obj){
+            return null;
+        }
+        return JSONObject.parseObject( obj.toString(), ActivitySkuStockKeyVO.class) ;
     }
 
     @Override
