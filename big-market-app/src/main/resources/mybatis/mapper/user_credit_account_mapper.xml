@@ -8,6 +8,7 @@
         <result column="total_amount" property="totalAmount"/>
         <result column="available_amount" property="availableAmount"/>
         <result column="account_status" property="accountStatus"/>
+        <result column="available_amount" property="availableAmount"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
