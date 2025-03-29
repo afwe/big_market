@@ -9,7 +9,7 @@ import cn.bugstack.domain.activity.model.entity.*;
 public interface IRaffleActivityAccountQuotaService {
     ActivityOrderEntity createRaffleActivityOrder(ActivityShopCartEntity activityShopCartEntity);
 
-    String createOrder(SkuRechargeEntity skuRechargeEntity);
+    UnpaidActivityOrderEntity createOrder(SkuRechargeEntity skuRechargeEntity);
 
     void updateOrder(DeliveryOrderEntity deliveryOrderEntity);
 

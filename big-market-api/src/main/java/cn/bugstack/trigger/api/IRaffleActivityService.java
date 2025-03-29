@@ -1,10 +1,10 @@
 package cn.bugstack.trigger.api;
 
-import cn.bugstack.trigger.api.dto.ActivityDrawRequestDTO;
-import cn.bugstack.trigger.api.dto.ActivityDrawResponseDTO;
-import cn.bugstack.trigger.api.dto.UserActivityAccountRequestDTO;
-import cn.bugstack.trigger.api.dto.UserActivityAccountResponseDTO;
+import cn.bugstack.trigger.api.dto.*;
 import cn.bugstack.types.model.Response;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author luke
@@ -19,5 +19,11 @@ public interface IRaffleActivityService {
 
     Response<Boolean> isCalendarSignRebate(String userId);
     Response<UserActivityAccountResponseDTO> queryUserActivityAccount(UserActivityAccountRequestDTO request);
+
+
+    Response<BigDecimal> queryUserCreditAccount(String userId);
+    Response<Boolean> creditPayExchangeSku(SkuProductShopCartRequestDTO request);
+    Response<List<SkuProductResponseDTO>> querySkuProductListByActivityId(Long activityId);
+
 
 }
