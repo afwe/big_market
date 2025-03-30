@@ -25,10 +25,13 @@ import cn.bugstack.domain.strategy.service.armory.IStrategyArmory;
 import cn.bugstack.trigger.api.IRaffleActivityService;
 import cn.bugstack.trigger.api.dto.*;
 import cn.bugstack.types.annotations.DCCValue;
+import cn.bugstack.types.annotations.RateLimiterAccessInterceptor;
 import cn.bugstack.types.enums.ResponseCode;
 import cn.bugstack.types.exception.AppException;
 import cn.bugstack.types.model.Response;
 import com.alibaba.fastjson.JSON;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -106,6 +109,25 @@ public class RaffleActivityController implements IRaffleActivityService {
                     .build();
         }
     }
+    public Response<ActivityDrawResponseDTO> drawRateLimiterError(@RequestBody ActivityDrawRequestDTO request) {
+        log.info("活动抽奖限流 userId:{} activityId:{}", request.getUserId(), request.getActivityId());
+        return Response.<ActivityDrawResponseDTO>builder()
+                .code(ResponseCode.RATE_LIMITER.getCode())
+                .info(ResponseCode.RATE_LIMITER.getInfo())
+                .build();
+    }
+    public Response<ActivityDrawResponseDTO> drawHystrixError(@RequestBody ActivityDrawRequestDTO request) {
+        log.info("活动抽奖熔断 userId:{} activityId:{}", request.getUserId(), request.getActivityId());
+        return Response.<ActivityDrawResponseDTO>builder()
+                .code(ResponseCode.HYSTRIX.getCode())
+                .info(ResponseCode.HYSTRIX.getInfo())
+                .build();
+    }
+    @RateLimiterAccessInterceptor(key="userId", fallbackMethod = "drawRateLimiterError", permitsPerSecond = 1.0d, blacklistCount = 1)
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "150")
+    }, fallbackMethod = "drawHystrixError"
+    )
     @ApiOperation("draw")
     @RequestMapping(value = "draw", method = RequestMethod.POST)
     @Override
