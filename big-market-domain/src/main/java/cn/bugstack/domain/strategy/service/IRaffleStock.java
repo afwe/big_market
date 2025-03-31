@@ -9,6 +9,9 @@ import cn.bugstack.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 public interface IRaffleStock {
     StrategyAwardStockKeyVO takeQueueValue() throws InterruptedException;
 
+    StrategyAwardStockKeyVO takeQueueValue(Long strategyId, Integer awardId) throws InterruptedException;
+
+
     void updateStrategyAwardStock(Long strategyId, Integer awardId);
 
 

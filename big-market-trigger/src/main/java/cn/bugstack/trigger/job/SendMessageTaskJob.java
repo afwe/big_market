@@ -4,14 +4,18 @@ import cn.bugstack.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 import cn.bugstack.domain.strategy.service.IRaffleStock;
 import cn.bugstack.domain.task.model.entity.TaskEntity;
 import cn.bugstack.domain.task.service.ITaskService;
+import cn.bugstack.infrastructure.persistent.redis.IRedisService;
 import cn.bugstack.middleware.db.router.strategy.IDBRouterStrategy;
+import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author luke
@@ -27,9 +31,17 @@ public class SendMessageTaskJob {
     private ThreadPoolExecutor executor;
     @Resource
     private IDBRouterStrategy dbRouter;
-    @Scheduled(cron = "0/5 * * * * ?")
+    @Resource
+    private IRedisService redisService;
+
+//    @Scheduled(cron = "0/5 * * * * ?")
+    @XxlJob("SendMessageTaskJob_DB1")
     public void exec(){
+        RLock lock = redisService.getLock("SendMessageTaskJob_DB1");
+        boolean isLocked = false;
         try{
+            isLocked = lock.tryLock(3,0, TimeUnit.SECONDS);
+            if(!isLocked) return;
             int dbCount = dbRouter.dbCount();
             for(int dbIdx = 1;dbIdx<=dbCount;dbIdx++){
                 int finalDbIdx = dbIdx;
@@ -65,6 +77,9 @@ public class SendMessageTaskJob {
             log.error("定时任务，扫描MQ任务表发送消息失败。", e);
         }finally {
             dbRouter.clear();
+            if (isLocked) {
+                lock.unlock();
+            }
         }
     }
 }

@@ -15,6 +15,10 @@
             <artifactId>db-router-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
         </dependency>
@@ -81,6 +85,10 @@
         <dependency>
             <groupId>cn.bugstack</groupId>
             <artifactId>big-market-domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.bugstack</groupId>
+            <artifactId>big-market-infrastructure</artifactId>
         </dependency>
     </dependencies>
 

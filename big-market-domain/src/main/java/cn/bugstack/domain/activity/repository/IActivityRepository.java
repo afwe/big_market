@@ -64,4 +64,8 @@ public interface IActivityRepository {
     UnpaidActivityOrderEntity queryUnpaidActivityOrder(SkuRechargeEntity skuRechargeEntity);
 
     List<SkuProductEntity> querySkuProductEntityListByActivityId(Long activityId);
+
+    List<Long> querySkuList();
+
+    ActivitySkuStockKeyVO takeQueueValue(Long sku);
 }
